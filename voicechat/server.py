@@ -40,7 +40,7 @@ def broadcast(msg, prefix=""):
 clients = {}
 addresses = {}
 
-HOST = 'plus.or.kr'
+HOST = ''
 PORT = 1025
 BUFSIZ = 1024
 ADDR = (HOST, PORT)
