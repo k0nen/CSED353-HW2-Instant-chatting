@@ -58,14 +58,18 @@ def send_text():
 		print('\033[A\033[A')
 		client_socket_text.send(bytes(msg, "utf8"))
 		if msg == "{quit}":
-			client_socket.close()
+			client_socket_text.close()
+			client_socket_voice.close()
 			quit()
 
 
 def send_voice():
 	while True:
-		data = stream_send.read(CHUNK)
-		client_socket_voice.sendall(data)
+		try:
+			data = stream_send.read(CHUNK)
+			client_socket_voice.sendall(data)
+		except OSError:
+			break
 
 
 HOST = input('Enter host: ')

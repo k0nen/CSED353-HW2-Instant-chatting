@@ -43,15 +43,17 @@ def handle_client_text(client):
 def handle_client_voice(client):
 	clients_voice[client] = 1
 	while client in clients_voice:
-		data = client.recv(1024)
-		broadcast(data, dtype='voice')
+		try:
+			data = client.recv(1024)
+			broadcast(data, dtype='voice')
+		except Exception as _:
+			client.close()
+			del clients_voice[client]
 
 
 def erase_client(client):
 	del clients_text[client]
 	del addresses_text[client]
-	del clients_voice[client]
-	del addresses_voice[client]
 
 
 def broadcast(msg, prefix="", dtype='text',):
