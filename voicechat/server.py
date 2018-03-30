@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-#Code from https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
+# Code from https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
 from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
+
 
 def accept_incoming_connections():
     while True:
@@ -23,7 +24,7 @@ def handle_client(client):
     while True:
         msg = client.recv(BUFSIZ)
         if msg != bytes("{quit}", "utf8"):
-            broadcast(msg, name+": ")
+            broadcast(msg, name + ": ")
         else:
             client.send(bytes("{quit}", "utf8"))
             client.close()
@@ -35,7 +36,8 @@ def handle_client(client):
 
 def broadcast(msg, prefix=""):
     for sock in clients:
-        sock.send(bytes(prefix, "utf8")+msg)
+        sock.send(bytes(prefix, "utf8") + msg)
+
 
 clients = {}
 addresses = {}

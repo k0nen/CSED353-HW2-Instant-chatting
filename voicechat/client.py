@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-#Code from https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
+# Code from https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
 from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
+
 
 def receive():
     while True:
@@ -11,6 +12,7 @@ def receive():
         except OSError:
             break
 
+
 def send(event=None):
     msg = input()
     print('\033[A\033[A')
@@ -18,6 +20,7 @@ def send(event=None):
     if msg == "{quit}":
         client_socket.close()
         quit()
+
 
 HOST = input('Enter host: ')
 PORT = 1025
@@ -33,5 +36,3 @@ receive_thread.start()
 
 while True:
     send()
-
-
