@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Code from https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
-from socket import AF_INET, socket, SOCK_STREAM
+import socket
 from threading import Thread
 
 
@@ -47,7 +47,8 @@ PORT = 1025
 BUFSIZ = 1024
 ADDR = (HOST, PORT)
 
-SERVER = socket(AF_INET, SOCK_STREAM)
+SERVER = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+SERVER.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 SERVER.bind(ADDR)
 
 if __name__ == "__main__":
