@@ -4,6 +4,7 @@ from threading import Thread
 import pyaudio
 from ctypes import *
 
+# Audio quality
 CHUNK = 8192
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
@@ -12,10 +13,12 @@ WIDTH = 2
 ERROR_HANDLER_FUNC = CFUNCTYPE(None, c_char_p, c_int, c_char_p, c_int, c_char_p)
 
 
+# This handler prevents the ALSA debug information from spamming stdout
 def py_error_handler(filename, line, function, err, fmt):
 	pass
 
 
+# PyAudio configurations
 c_error_handler = ERROR_HANDLER_FUNC(py_error_handler)
 asound = cdll.LoadLibrary('libasound.so.2')
 asound.snd_lib_error_set_handler(c_error_handler)
@@ -34,6 +37,7 @@ stream_recv = p.open(
 	frames_per_buffer=CHUNK)
 
 
+# Text receive thread, print any message received
 def receive_text():
 	while True:
 		try:
@@ -43,6 +47,7 @@ def receive_text():
 			break
 
 
+# Voice receive thread, print any voice snippet received
 def receive_voice():
 	while True:
 		try:
@@ -52,6 +57,8 @@ def receive_voice():
 			break
 
 
+# Text sending thread, sends this client's message to server
+# If the user writes {quit}, then close connection
 def send_text():
 	while True:
 		msg = input()
@@ -63,6 +70,7 @@ def send_text():
 			quit()
 
 
+# Voice sending thread, sends voice chunk everytime the buffer gets full
 def send_voice():
 	while True:
 		try:
@@ -72,6 +80,7 @@ def send_voice():
 			break
 
 
+# Main execution route
 HOST = input('Enter host: ')
 PORT_TEXT = 1025
 PORT_VOICE = 50007

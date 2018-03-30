@@ -3,6 +3,7 @@ import socket
 from threading import Thread
 
 
+# Text socket manager, assign a thread to each connection
 def accept_text():
 	while True:
 		client, client_address = SERVER_TEXT.accept()
@@ -12,6 +13,7 @@ def accept_text():
 		Thread(target=handle_client_text, args=(client,)).start()
 
 
+# Voice socket manager, assign a thread to each connection
 def accept_voice():
 	while True:
 		client, client_address = SERVER_VOICE.accept()
@@ -20,6 +22,8 @@ def accept_voice():
 		print('voice OK')
 
 
+# Main text message handler for each client
+# The first recv() is for name, then it will broadcast the messages received until {quit}.
 def handle_client_text(client):
 	name = client.recv(BUFSIZ).decode("utf8")
 	welcome = 'Welcome %s! If you ever want to quit, type {quit} to exit.' % name
@@ -40,6 +44,8 @@ def handle_client_text(client):
 			break
 
 
+# Main voice message handler for each client
+# Will broadcast the voice snippet to every client
 def handle_client_voice(client):
 	clients_voice[client] = 1
 	while client in clients_voice:
@@ -51,11 +57,13 @@ def handle_client_voice(client):
 			del clients_voice[client]
 
 
+# Delete a text socket from client list
 def erase_client(client):
 	del clients_text[client]
 	del addresses_text[client]
 
 
+# Broadcast a message to every client, depends on voice or text
 def broadcast(msg, prefix="", dtype='text',):
 	if dtype == 'text':
 		for sock in clients_text:
