@@ -10,7 +10,6 @@ FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 44100
 WIDTH = 2
-SILENCE = chr(0) * CHUNK * CHANNELS
 
 ERROR_HANDLER_FUNC = CFUNCTYPE(None, c_char_p, c_int, c_char_p, c_int, c_char_p)
 
