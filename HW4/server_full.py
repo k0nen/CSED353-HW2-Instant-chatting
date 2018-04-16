@@ -26,7 +26,7 @@ def accept_voice():
 # The first recv() is for name, then it will broadcast the messages received until {quit}.
 def handle_client_text(client):
 	name = client.recv(BUFSIZ).decode("utf8")
-	welcome = 'Welcome %s! If you ever want to quit, type {quit} to exit.' % name
+	welcome = 'Welcome %s!\nIf you ever want to quit, type {quit} to exit.' % name
 	client.send(bytes(welcome, "utf8"))
 	msg = "%s has joined the chat!" % name
 	broadcast(bytes(msg, "utf8"))
@@ -51,7 +51,7 @@ def handle_client_voice(client):
 	while client in clients_voice:
 		try:
 			data = client.recv(1024)
-			broadcast(data, dtype='voice')
+			broadcast(data, dtype='voice', client)
 		except Exception as _:
 			client.close()
 			del clients_voice[client]
@@ -64,13 +64,14 @@ def erase_client(client):
 
 
 # Broadcast a message to every client, depends on voice or text
-def broadcast(msg, prefix="", dtype='text',):
+def broadcast(msg, prefix="", dtype='text', sd=None):
 	if dtype == 'text':
 		for sock in clients_text:
 			sock.send(bytes(prefix, "utf8") + msg)
 	else:  # dtype == 'voice'
 		for sock in clients_voice:
-			sock.send(msg)
+			if sd != sock:
+				sock.send(msg)
 
 
 # Main execution route
