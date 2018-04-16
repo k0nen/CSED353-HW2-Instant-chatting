@@ -26,7 +26,7 @@ def accept_voice():
 # The first recv() is for name, then it will broadcast the messages received until {quit}.
 def handle_client_text(client):
 	name = client.recv(BUFSIZ).decode("utf8")
-	welcome = 'Welcome %s!\nIf you ever want to quit, type {quit} to exit.' % name
+	welcome = 'Welcome %s! If you ever want to quit, type {quit} to exit.' % name
 	client.send(bytes(welcome, "utf8"))
 	msg = "%s has joined the chat!" % name
 	broadcast(bytes(msg, "utf8"))
@@ -35,7 +35,7 @@ def handle_client_text(client):
 	while True:
 		msg = client.recv(BUFSIZ)
 		if msg != bytes("{quit}", "utf8"):
-			broadcast(msg, name + ": ")
+                        broadcast(msg, name + ": ")
 		else:
 			client.send(bytes("{quit}", "utf8"))
 			client.close()
@@ -51,7 +51,7 @@ def handle_client_voice(client):
 	while client in clients_voice:
 		try:
 			data = client.recv(1024)
-			broadcast(data, dtype='voice', client)
+			broadcast(data, dtype='voice', sd=client)
 		except Exception as _:
 			client.close()
 			del clients_voice[client]
