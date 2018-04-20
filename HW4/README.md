@@ -1,4 +1,4 @@
-# Simple text voice chatting program
+# Simple text/voice/video chatting program
 > CSED353 Computer Networks Assignment 4
 
 > 20160832 Geunwoo Kim
