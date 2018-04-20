@@ -10,7 +10,6 @@ from PIL import Image
 from PIL import ImageTk
 import cv2
 import io
-import numpy
 
 # Audio quality
 CHUNK = 8192
@@ -23,14 +22,16 @@ ERROR_HANDLER_FUNC = CFUNCTYPE(None, c_char_p, c_int, c_char_p, c_int, c_char_p)
 # Needed for webcam
 cap = cv2.VideoCapture(0)
 
+
 # This handler prevents the ALSA debug information from spamming stdout
 def py_error_handler(filename, line, function, err, fmt):
 	pass
 
+
 # PyAudio configurations
 c_error_handler = ERROR_HANDLER_FUNC(py_error_handler)
-#asound = cdll.LoadLibrary('libasound.so.2')
-#asound.snd_lib_error_set_handler(c_error_handler)
+# asound = cdll.LoadLibrary('libasound.so.2')
+# asound.snd_lib_error_set_handler(c_error_handler)
 p = pyaudio.PyAudio()
 stream_send = p.open(
 	format=pyaudio.paInt16,
@@ -64,6 +65,7 @@ def receive_voice():
 			stream_recv.write(data)
 		except OSError:
 			break
+
 
 def receive_video():
 	global panel
@@ -101,7 +103,6 @@ def receive_video():
 				panel = tkinter.Label(video_frame, image=image)
 				panel.image = image
 				panel.pack(side=tkinter.TOP, expand=True)
-
 
 			# Otherwise, simply update the panel
 			else:
@@ -169,10 +170,12 @@ def send_video():
 				raise RuntimeError("Socket connection broken")
 			totalsent += sent
 
+
 # Executed when window is closed
 def on_closing(event=None):
 	my_msg.set("{quit}")
 	send_text(1)
+
 
 # Pull webcam video to screen
 def show_my_video():
@@ -190,7 +193,7 @@ def show_my_video():
 		if panel is None:
 			panel = tkinter.Label(image=image)
 			panel.image = image
-			panel.place(height=110, width=110,x=256,y=5)
+			panel.place(height=110, width=110, x=256, y=5)
 
 		else:
 			panel.configure(image=image)
@@ -217,18 +220,17 @@ scrollbar = tkinter.Scrollbar(messages_frame)
 
 entry_field = tkinter.Entry(button_frame, textvariable=my_msg)
 entry_field.bind("<Return>", send_text)
-entry_field.pack(side=tkinter.LEFT,padx=10)
+entry_field.pack(side=tkinter.LEFT, padx=10)
 
 send_button = tkinter.Button(button_frame, text="Send", command=send_text)
-send_button.pack(side=tkinter.LEFT,padx=10)
+send_button.pack(side=tkinter.LEFT, padx=10)
 
 send_button = tkinter.Button(button_frame, text="Made by k0nen & gnu", command=send_text)
-send_button.pack(side=tkinter.LEFT,padx=10)
+send_button.pack(side=tkinter.LEFT, padx=10)
 
 msg_list = tkinter.Listbox(messages_frame, height=15, width=50, yscrollcommand=scrollbar.set)
 scrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y)
 msg_list.pack(side=tkinter.TOP, fill=tkinter.BOTH)
-
 
 
 top.protocol("WM_DELETE_WINDOW", on_closing)
@@ -242,7 +244,7 @@ except IndexError:
 
 PORT_TEXT = 1025
 PORT_VOICE = 50007
-PORT_VIDEO =1026
+PORT_VIDEO = 1026
 
 BUFSIZ = 1024
 

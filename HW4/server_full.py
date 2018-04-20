@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import socket
 from threading import Thread
-import threading
+
 
 # Text socket manager, assign a thread to each connection
 def accept_text():
@@ -67,7 +67,6 @@ def handle_client_voice(client):
 def handle_client_video(client):
 	clients_video[client] = 1
 	while client in clients_video:
-		#try:
 		totrec = 0
 		metarec = 0
 		msgArray = []
@@ -81,19 +80,13 @@ def handle_client_video(client):
 		length = int(chunk.decode("utf8"))
 
 		while totrec < length:
-			chunk = client.recv(length-totrec)
+			chunk = client.recv(length - totrec)
 			if chunk == '':
 				raise RuntimeError("Socket connection broken")
 			msgArray.append(chunk)
 			totrec += len(chunk)
 
-
-		broadcast(b''.join(metaArray+msgArray), dtype="video",sd=client)
-
-		#except Exception as _:
-		#	print('fuck!')
-		#	client.close()
-		#	del clients_video[client]
+		broadcast(b''.join(metaArray + msgArray), dtype="video", sd=client)
 
 
 # Delete a text socket from client list
