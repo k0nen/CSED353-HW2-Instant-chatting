@@ -1,3 +1,12 @@
+/* CSED353 Assignment 6
+	20160360 Sunghyun Myung
+
+	References:
+	http://www.tcpdump.org/pcap.htm
+	https://www.ibm.com/support/knowledgecenter/en/ssw_aix_61/com.ibm.aix.progcomc/libpcap_pcap2.htm
+*/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pcap.h>
