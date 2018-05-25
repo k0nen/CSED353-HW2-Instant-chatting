@@ -1,2 +1,4 @@
-HW6/a.out
-HW6/internet_trace.pcap
+HW6/*.out
+HW6/*.pcap
+HW6/*.txt
+

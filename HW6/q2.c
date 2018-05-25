@@ -18,6 +18,8 @@ typedef struct __endhost {
 	struct __endhost *next;
 } _endhost;
 
+// Only updates the list with destination IPs
+// Adjust offset to add source IP - see call part in main()
 void update_endhost(const u_char *p, _endhost **head, int size) {
 	char dst[16];
 	_endhost *last, *ptr = *head;
@@ -117,6 +119,9 @@ int main(int argc, char *argv[]) {
 		else if(src_port == 53 || dest_port == 53) cnt_dns++;
 		else if(src_port == 80 || dest_port == 80) cnt_http++;
 
+		// update_endhost was intended to add only destination IPs to the list
+		// therefore, adjusting the offset can add the source IPs too
+		update_endhost(packet + 0xb, &hosts, header.len);
 		update_endhost(packet + 0xe, &hosts, header.len);
 	}
 
